@@ -75,9 +75,35 @@ public class TodosTest {
     }
 
     @Test
+    public void shouldFindAllTasksOnQuery() {
+        SimpleTask simpleTask1 = new SimpleTask(5, "Позвонить родителям");
+        SimpleTask simpleTask2 = new SimpleTask(7, "Позвонить в проектный институт");
+
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
+        Epic epic = new Epic(55, subtasks);
+
+        Meeting meeting = new Meeting(
+                15,
+                "Плановая остановка МН",
+                "Разработка проекта производства работ",
+                "В среду утром"
+        );
+        Todos todos = new Todos();
+
+        todos.add(simpleTask1);
+        todos.add(simpleTask2);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask2, meeting};
+        Task[] actual = todos.search("проект");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
     public void shouldNotFindWithoutAnyTasks() {
         Todos todos = new Todos();
-        
+
         Task[] expected = {};
         Task[] actual = todos.search("Позвонить");
         Assertions.assertArrayEquals(expected, actual);
